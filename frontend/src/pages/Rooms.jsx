@@ -108,7 +108,7 @@ function Rooms() {
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1.5 text-amber-400 font-medium">
-              <CrownOutlined /> LuxeHotel Luxury Resort & Convention
+              <CrownOutlined /> The Infinity Luxury Resort & Convention
             </span>
             <span className="hidden md:inline text-slate-500">|</span>
             <span className="hidden md:inline">Hotline 24/7: <b className="text-white">1900 8888</b></span>
@@ -130,7 +130,7 @@ function Rooms() {
               🏨
             </div>
             <div>
-              <span className="text-2xl font-black tracking-wider text-white">LUXE<span className="text-amber-400">HOTEL</span></span>
+              <span className="text-2xl font-black tracking-wider text-white">THE <span className="text-amber-400">INFINITY</span></span>
               <span className="block text-[10px] tracking-widest uppercase text-slate-400 font-semibold -mt-1">5-Star Luxury Resort</span>
             </div>
           </Link>
@@ -198,23 +198,24 @@ function Rooms() {
       </header>
 
       {/* Luxury Hero Banner */}
-      <div className="relative bg-[#0b1329] py-14 overflow-hidden border-b border-slate-800">
+      <div className="relative py-14 overflow-hidden border-b border-slate-200">
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-luminosity"
+          className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=2000&q=80')`,
+            backgroundImage: `url('/images/hero-beach.jpg')`,
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/90 via-[#0b1329]/95 to-[#0b1329]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/10" />
+        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#f8fafc] to-transparent" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold uppercase tracking-widest mb-3 backdrop-blur-sm">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10 drop-shadow-md">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/20 border border-white/40 text-white shadow-sm text-xs font-bold uppercase tracking-widest mb-3 backdrop-blur-md">
             <span>👑 DANH SÁCH PHÒNG & BIỆT THỰ NGHỈ DƯỠNG</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight mb-3">
+          <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight mb-3 drop-shadow-lg">
             Chọn không gian lưu trú thượng hạng
           </h1>
-          <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto font-light">
+          <p className="text-white text-sm sm:text-base max-w-2xl mx-auto font-medium drop-shadow-md">
             Tận hưởng phòng ốc chuẩn 5 sao với tầm nhìn hướng biển tuyệt đẹp, ban công riêng và nội thất cao cấp bậc nhất.
           </p>
         </div>
@@ -430,20 +431,20 @@ function Rooms() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
             <div className="md:col-span-1">
               <div className="text-2xl font-black text-white mb-3">
-                LUXE<span className="text-amber-400">HOTEL</span>
+                THE <span className="text-amber-400">INFINITY</span>
               </div>
               <p className="text-xs text-slate-400 leading-relaxed mb-4">
                 Hệ thống khách sạn & khu nghỉ dưỡng chuẩn 5 sao quốc tế, mang lại không gian thư giãn đỉnh cao cho từng hành trình.
               </p>
               <div className="text-xs text-slate-500">
-                © 2026 LuxeHotel Resort. All rights reserved.
+                © 2026 The Infinity Resort. All rights reserved.
               </div>
             </div>
 
             <div>
               <h4 className="text-white font-bold mb-4 text-xs uppercase tracking-wider">Về chúng tôi</h4>
               <ul className="space-y-2 text-xs">
-                <li><Link to="/" className="hover:text-amber-400 transition-colors">Giới thiệu LuxeHotel</Link></li>
+                <li><Link to="/" className="hover:text-amber-400 transition-colors">Giới thiệu The Infinity</Link></li>
                 <li><Link to="/rooms" className="hover:text-amber-400 transition-colors">Hệ thống phòng & Biệt thự</Link></li>
                 <li><Link to="/#services" className="hover:text-amber-400 transition-colors">Dịch vụ & Tiện ích</Link></li>
               </ul>
@@ -462,7 +463,7 @@ function Rooms() {
               <h4 className="text-white font-bold mb-4 text-xs uppercase tracking-wider">Liên hệ trực tiếp</h4>
               <p className="text-xs text-slate-400 mb-2">📍 Võ Nguyên Giáp, Sơn Trà, Đà Nẵng, Việt Nam</p>
               <p className="text-xs text-slate-400 mb-2">📞 Hotline: 1900 8888 / 028 3822 9999</p>
-              <p className="text-xs text-slate-400 mb-4">✉️ reservation@luxehotel.vn</p>
+              <p className="text-xs text-slate-400 mb-4">✉️ reservation@theinfinity.vn</p>
             </div>
           </div>
 

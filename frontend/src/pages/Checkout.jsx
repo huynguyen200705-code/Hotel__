@@ -14,9 +14,9 @@ const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 const PROMO_CODES = {
-  'LUXEWELCOME': { discount: 0.15, label: 'Giảm 15% đặt phòng lần đầu' },
-  'WEEKENDLUX': { discountValue: 300000, label: 'Giảm trực tiếp 300.000₫' },
-  'VIELUXURY2026': { discount: 0.25, label: 'Giảm 25% ưu đãi VIP 2026' }
+  'LUXEWELCOME': { discount: 0.15, label: 'Giảm 15% đặt phòng lần đầu', allowedTiers: ['Thường', 'Bạc', 'Vàng', 'Kim Cương'] },
+  'WEEKENDLUX': { discountValue: 300000, label: 'Giảm trực tiếp 300.000₫', allowedTiers: ['Bạc', 'Vàng', 'Kim Cương'] },
+  'VIELUXURY2026': { discount: 0.25, label: 'Giảm 25% ưu đãi VIP 2026', allowedTiers: ['Vàng', 'Kim Cương'] }
 };
 
 function Checkout() {
@@ -127,8 +127,18 @@ function Checkout() {
       message.warning('Vui lòng nhập mã giảm giá');
       return;
     }
-    if (PROMO_CODES[code]) {
-      setAppliedPromo({ code, ...PROMO_CODES[code] });
+    const promo = PROMO_CODES[code];
+    if (promo) {
+      const currentTier = customerUser?.membership_tier || 'Thường';
+      if (!customerUser) {
+        message.warning('Vui lòng đăng nhập để sử dụng mã ưu đãi!');
+        return;
+      }
+      if (!promo.allowedTiers.includes(currentTier)) {
+        message.error(`Mã giảm giá này không áp dụng cho hạng thành viên của bạn (${currentTier})!`);
+        return;
+      }
+      setAppliedPromo({ code, ...promo });
       message.success(`Đã áp dụng mã ưu đãi: ${code}!`);
     } else {
       message.error('Mã giảm giá không tồn tại hoặc đã hết hạn!');
@@ -172,6 +182,10 @@ function Checkout() {
   // 1. Khi bấm nút "THANH TOÁN CỌC" hoặc "THANH TOÁN 100%"
   const onFinish = async (values) => {
     if (!room) return;
+    if (!selectedDates || !selectedDates[0] || !selectedDates[1]) {
+      message.error('Vui lòng chọn ngày nhận và trả phòng!');
+      return;
+    }
     setPendingValues(values);
     setQrModalOpen(true);
   };
@@ -187,8 +201,8 @@ function Checkout() {
 
     setLoading(true);
 
-    const checkInDate = pendingValues.dates[0].format('YYYY-MM-DD');
-    const checkOutDate = pendingValues.dates[1].format('YYYY-MM-DD');
+    const checkInDate = selectedDates[0].format('YYYY-MM-DD');
+    const checkOutDate = selectedDates[1].format('YYYY-MM-DD');
 
     const payload = {
       full_name: pendingValues.fullName,
@@ -265,7 +279,7 @@ function Checkout() {
               🏨
             </div>
             <div>
-              <span className="text-2xl font-black tracking-wider text-white">LUXE<span className="text-amber-400">HOTEL</span></span>
+              <span className="text-2xl font-black tracking-wider text-white">THE <span className="text-amber-400">INFINITY</span></span>
               <span className="block text-[10px] tracking-widest uppercase text-slate-400 font-semibold -mt-1">Thanh toán & Đặt phòng</span>
             </div>
           </Link>
@@ -465,7 +479,7 @@ function Checkout() {
                 </Button>
                 
                 <p className="text-[11px] text-center text-slate-400 mt-3">
-                  Bằng việc bấm thanh toán, bạn đồng ý với các <a href="#" className="underline text-slate-500">Quy định & Chính sách hủy phòng</a> của LuxeHotel.
+                  Bằng việc bấm thanh toán, bạn đồng ý với các <a href="#" className="underline text-slate-500">Quy định & Chính sách hủy phòng</a> của The Infinity.
                 </p>
               </Form>
             </div>

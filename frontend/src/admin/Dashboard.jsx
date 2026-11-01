@@ -27,17 +27,20 @@ const statusLabels = {
 function Dashboard() {
   const [bookings, setBookings] = useState([]);
   const [customers, setCustomers] = useState(0);
+  const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [bookingsRes, customersRes] = await Promise.all([
+        const [bookingsRes, customersRes, statsRes] = await Promise.all([
           axios.get('/api/bookings'),
           axios.get('/api/customers?limit=1'),
+          axios.get('/api/bookings/stats')
         ]);
         setBookings(bookingsRes.data);
         setCustomers(customersRes.data.total);
+        setStats(statsRes.data);
       } catch (err) {
         console.error('Lỗi tải dashboard, kiểm tra backend đã chạy chưa:', err.message);
       }
@@ -119,11 +122,11 @@ function Dashboard() {
               </div>
             </div>
             <div className="text-3xl font-extrabold tracking-tight">
-              {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalRevenue)}
+              {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(stats?.total_revenue_month || totalRevenue)}
             </div>
             <div className="mt-4 pt-3 border-t border-white/15 text-indigo-100 text-xs font-medium flex items-center gap-1.5">
               <ArrowUpOutlined className="text-emerald-300" />
-              <span>Từ tất cả các đơn đặt phòng</span>
+              <span>{stats?.total_revenue_month ? 'Doanh thu trong tháng này' : 'Từ tất cả các đơn đặt phòng'}</span>
             </div>
           </div>
         </Col>
@@ -161,7 +164,7 @@ function Dashboard() {
               </div>
             </div>
             <div className="text-3xl font-extrabold tracking-tight">
-              {activeBookings.toLocaleString()}
+              {stats?.active_bookings?.toLocaleString() || activeBookings.toLocaleString()}
             </div>
             <div className="mt-4 pt-3 border-t border-white/15 text-rose-100 text-xs font-medium flex items-center gap-1.5">
               <CalendarOutlined className="text-rose-200" />
@@ -178,14 +181,8 @@ function Dashboard() {
           <div style={{ width: '100%', height: 300 }}>
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
-                data={[
-                  { name: 'T2', revenue: 4200000 },
-                  { name: 'T3', revenue: 3800000 },
-                  { name: 'T4', revenue: 6500000 },
-                  { name: 'T5', revenue: 5100000 },
-                  { name: 'T6', revenue: 9800000 },
-                  { name: 'T7', revenue: 14500000 },
-                  { name: 'CN', revenue: 16200000 },
+                data={stats?.chart_data?.length > 0 ? stats.chart_data : [
+                  { name: 'Chưa có', revenue: 0 },
                 ]}
                 margin={{ top: 10, right: 30, left: 20, bottom: 0 }}
               >

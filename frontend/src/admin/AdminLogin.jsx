@@ -49,7 +49,7 @@ function AdminLogin() {
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="text-6xl mb-4">🏨</div>
-          <h1 className="text-3xl font-bold text-white tracking-wide">LuxeHotel CRM</h1>
+          <h1 className="text-3xl font-bold text-white tracking-wide">The Infinity CRM</h1>
           <p className="text-blue-300 mt-2">Hệ thống quản lý khách sạn</p>
         </div>
 

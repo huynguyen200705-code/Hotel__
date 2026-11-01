@@ -89,7 +89,7 @@ function CustomerLogin() {
             fontSize: 32, marginBottom: 16, boxShadow: '0 8px 32px rgba(245,158,11,0.3)'
           }}>🏨</div>
           <h1 style={{ color: '#fff', fontSize: 28, fontWeight: 700, margin: 0, letterSpacing: '-0.5px' }}>
-            LuxeHotel
+            The Infinity
           </h1>
           <p style={{ color: '#94a3b8', marginTop: 6, fontSize: 14 }}>
             Chào mừng trở lại! Đăng nhập để tiếp tục

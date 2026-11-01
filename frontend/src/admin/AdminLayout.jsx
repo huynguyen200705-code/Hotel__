@@ -12,6 +12,7 @@ import {
   LogoutOutlined,
   CalendarOutlined,
   SafetyCertificateOutlined,
+  DollarOutlined,
 } from '@ant-design/icons';
 
 const { Header, Sider, Content } = Layout;
@@ -50,6 +51,11 @@ function AdminLayout() {
       key: '/admin/customers',
       icon: <UserOutlined />,
       label: <Link to="/admin/customers">Khách hàng (CRM)</Link>,
+    },
+    {
+      key: '/admin/refunds',
+      icon: <DollarOutlined />,
+      label: <Link to="/admin/refunds">Yêu cầu hoàn tiền</Link>,
     },
     // Chỉ Admin mới có quyền truy cập Giá AI và Phân quyền nội bộ
     ...(isAdmin ? [
@@ -105,7 +111,7 @@ function AdminLayout() {
             color: '#f8fafc'
           }}
         >
-          {collapsed ? '🏨' : '🏨 LUXE CRM'}
+          {collapsed ? '🏨' : '🏨 THE INFINITY CRM'}
         </div>
         <Menu
           theme="dark"
