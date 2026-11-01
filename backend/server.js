@@ -31,6 +31,7 @@ const customerRoutes = require('./routes/customers');
 const roomRoutes = require('./routes/rooms');
 const bookingRoutes = require('./routes/bookings');
 const aiRoutes = require('./routes/ai');
+const refundRoutes = require('./routes/refunds');
 
 // Use Routes
 app.use('/api/auth', authRoutes);
@@ -38,6 +39,7 @@ app.use('/api/customers', customerRoutes);
 app.use('/api/rooms', roomRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/refunds', refundRoutes);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {

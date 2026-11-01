@@ -25,6 +25,7 @@ router.get('/', async (req, res) => {
                         SELECT 1 FROM Bookings b 
                         WHERE b.room_id = r.id 
                           AND b.booking_status NOT IN ('Cancelled', 'CheckedOut')
+                          AND (b.booking_status != 'Pending_Payment' OR (b.booking_status = 'Pending_Payment' AND ISNULL(b.expires_at, DATEADD(day, 1, GETDATE())) > GETDATE()))
                           AND (b.check_in_date < @check_out AND b.check_out_date > @check_in)
                     ) THEN 'Booked'
                     ELSE 'Available'
@@ -56,7 +57,28 @@ router.get('/', async (req, res) => {
 
         const result = await request.query(queryStr);
 
-        // Gán trạng thái và chuẩn hóa danh sách ảnh (images array)
+        // -- TASK 4: ÁP DỤNG QUY TẮC GIÁ ĐỘNG (PRICE RULES / AI PRICING) --
+        let priceModifier = 0;
+        let activeRuleName = null;
+        
+        if (check_in) {
+            const ruleReq = pool.request();
+            ruleReq.input('check_in_date', sql.Date, check_in);
+            const ruleRes = await ruleReq.query(`
+                SELECT TOP 1 rule_name, price_modifier_percent 
+                FROM PriceRules 
+                WHERE is_active = 1 
+                  AND start_date <= @check_in_date 
+                  AND end_date >= @check_in_date
+            `);
+            
+            if (ruleRes.recordset.length > 0) {
+                priceModifier = parseFloat(ruleRes.recordset[0].price_modifier_percent);
+                activeRuleName = ruleRes.recordset[0].rule_name;
+            }
+        }
+
+        // Gán trạng thái, chuẩn hóa ảnh và Áp dụng Giá động
         const mapped = result.recordset.map(r => {
             let imgList = [];
             if (r.images) {
@@ -71,8 +93,16 @@ router.get('/', async (req, res) => {
                 imgList = [r.image_url];
             }
 
+            let finalPrice = r.current_price;
+            if (priceModifier !== 0) {
+                finalPrice = finalPrice * (1 + priceModifier / 100);
+            }
+
             return {
                 ...r,
+                current_price: finalPrice,
+                original_price: priceModifier !== 0 ? r.current_price : null,
+                price_rule: activeRuleName,
                 status: r.date_status || r.status,
                 image_url: imgList[0] || r.image_url || null,
                 images: imgList
