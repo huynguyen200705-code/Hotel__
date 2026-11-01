@@ -82,7 +82,7 @@ function CustomerRegister() {
             background: 'linear-gradient(135deg, #f59e0b, #ef4444)',
             fontSize: 32, marginBottom: 14, boxShadow: '0 8px 32px rgba(245,158,11,0.3)'
           }}>🏨</div>
-          <h1 style={{ color: '#fff', fontSize: 26, fontWeight: 700, margin: 0 }}>LuxeHotel</h1>
+          <h1 style={{ color: '#fff', fontSize: 26, fontWeight: 700, margin: 0 }}>The Infinity</h1>
           <p style={{ color: '#94a3b8', marginTop: 6, fontSize: 14 }}>Tạo tài khoản để đặt phòng và tích điểm thành viên</p>
         </div>
 

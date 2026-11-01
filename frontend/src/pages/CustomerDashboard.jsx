@@ -176,7 +176,7 @@ function CustomerDashboard() {
               background: 'linear-gradient(135deg, #f59e0b, #ef4444)',
               display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18
             }}>🏨</div>
-            <span style={{ color: '#fff', fontWeight: 700, fontSize: 18 }}>LuxeHotel</span>
+            <span style={{ color: '#fff', fontWeight: 700, fontSize: 18 }}>The Infinity</span>
           </Link>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>

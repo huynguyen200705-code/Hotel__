@@ -13,6 +13,7 @@ import AdminRooms from './admin/Rooms';
 import AdminBookings from './admin/Bookings';
 import AIPricing from './admin/AIPricing';
 import RolesManagement from './admin/RolesManagement';
+import Refunds from './admin/Refunds';
 
 // ==============================================================
 // Helper: giải mã role từ JWT (không cần thư viện)
@@ -113,6 +114,7 @@ function App() {
           <Route path="bookings" element={<AdminBookings />} />
           <Route path="rooms" element={<AdminRooms />} />
           <Route path="customers" element={<Customers />} />
+          <Route path="refunds" element={<Refunds />} />
           {/* Các route chỉ dành riêng cho Quản trị viên (Admin) */}
           <Route
             path="ai-pricing"

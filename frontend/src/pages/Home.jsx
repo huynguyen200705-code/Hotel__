@@ -5,7 +5,7 @@ import {
   CompassOutlined, EnvironmentOutlined, CheckCircleFilled,
   GiftOutlined, CopyOutlined, StarFilled, ArrowRightOutlined,
   SafetyCertificateOutlined, CustomerServiceOutlined, CrownOutlined,
-  CarOutlined, PhoneOutlined, ClockCircleOutlined, CheckOutlined, PictureOutlined
+  CarOutlined, PhoneOutlined, ClockCircleOutlined, CheckOutlined, PictureOutlined, LockOutlined
 } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -27,23 +27,29 @@ const PROMO_CODES = [
   {
     code: 'LUXEWELCOME',
     title: 'Giảm 15% cho đặt phòng lần đầu',
-    desc: 'Áp dụng cho khách hàng mới đăng ký tài khoản LuxeHotel',
+    desc: 'Áp dụng cho khách hàng mới đăng ký tài khoản The Infinity',
     tag: 'Thành viên mới',
-    discount: '15%'
+    discount: '15%',
+    allowedTiers: ['Thường', 'Bạc', 'Vàng', 'Kim Cương'],
+    lockMsg: 'Chỉ dành cho thành viên'
   },
   {
     code: 'WEEKENDLUX',
     title: 'Tặng Voucher 300.000₫ Ẩm thực',
     desc: 'Áp dụng cho đặt phòng từ 2 đêm cuối tuần (T6 - CN)',
-    tag: 'Cuối tuần',
-    discount: '300k'
+    tag: 'Hạng Bạc trở lên',
+    discount: '300k',
+    allowedTiers: ['Bạc', 'Vàng', 'Kim Cương'],
+    lockMsg: 'Dành cho hội viên hạng Bạc trở lên'
   },
   {
     code: 'VIELUXURY2026',
     title: 'Ưu đãi Suite & Deluxe lên đến 25%',
     desc: 'Dành riêng cho các hạng phòng cao cấp và khách thân thiết',
     tag: 'Hạng VIP',
-    discount: '25%'
+    discount: '25%',
+    allowedTiers: ['Vàng', 'Kim Cương'],
+    lockMsg: 'Chỉ dành cho hội viên Vàng & Kim Cương'
   },
 ];
 
@@ -58,6 +64,9 @@ function Home() {
   const [roomTypes, setRoomTypes] = useState([]);
   const [guests, setGuests] = useState('2');
   const navigate = useNavigate();
+
+  const currentTier = customerUser?.membership_tier || 'Thường';
+  const isLoggedIn = !!customerUser;
 
   useEffect(() => {
     const stored = localStorage.getItem('customerUser');
@@ -137,7 +146,7 @@ function Home() {
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1.5 text-amber-400 font-medium">
-              <CrownOutlined /> LuxeHotel Luxury Resort & Convention
+              <CrownOutlined /> The Infinity Luxury Resort & Convention
             </span>
             <span className="hidden md:inline text-slate-500">|</span>
             <span className="hidden md:inline">Hotline 24/7: <b className="text-white">1900 8888</b></span>
@@ -159,7 +168,7 @@ function Home() {
               🏨
             </div>
             <div>
-              <span className="text-2xl font-black tracking-wider text-white">LUXE<span className="text-amber-400">HOTEL</span></span>
+              <span className="text-2xl font-black tracking-wider text-white">THE <span className="text-amber-400">INFINITY</span></span>
               <span className="block text-[10px] tracking-widest uppercase text-slate-400 font-semibold -mt-1">5-Star Luxury Resort</span>
             </div>
           </Link>
@@ -226,27 +235,30 @@ function Home() {
         </div>
       </header>
 
-      {/* Hero Showcase Section - Phong cách Traveloka Resort siêu sang */}
-      <div className="relative bg-[#0b1329] pt-8 pb-32 overflow-hidden">
-        {/* Background Overlay Image with High-end gradient */}
+      {/* Hero Showcase Section - Phong cách Bãi biển */}
+      <div className="relative pt-8 pb-32 overflow-hidden">
+        {/* Ảnh nền bãi biển */}
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-luminosity scale-105 transform hover:scale-100 transition-all duration-1000"
+          className="absolute inset-0 bg-cover bg-center scale-105 transform hover:scale-100 transition-all duration-1000"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=2000&q=80')`,
+            backgroundImage: `url('/images/hero-beach.jpg')`,
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/80 via-[#0b1329]/90 to-[#0b1329]" />
+        
+        {/* Lớp phủ (Overlay) */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/10" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#f8fafc] to-transparent" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 text-center">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 text-center drop-shadow-md">
           {/* Tagline */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold uppercase tracking-widest mb-4 backdrop-blur-sm">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 border border-white/40 text-white text-xs font-bold uppercase tracking-widest mb-4 backdrop-blur-md shadow-sm">
             <span>✨ KHÔNG GIAN NGHỈ DƯỠNG HOÀN MỸ</span>
           </div>
           
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight mb-4 leading-tight">
-            Kỳ nghỉ thượng lưu – <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500 bg-clip-text text-transparent">Trải nghiệm vượt trội</span>
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight mb-4 leading-tight drop-shadow-xl">
+            Kỳ nghỉ thượng lưu – <span className="text-amber-300">Trải nghiệm vượt trội</span>
           </h1>
-          <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto mb-8 font-light">
+          <p className="text-white text-base sm:text-lg max-w-2xl mx-auto mb-8 font-medium drop-shadow-lg">
             Khám phá thiên đường nghỉ dưỡng 5 sao cùng chuỗi dịch vụ cá nhân hóa chuẩn quốc tế.
           </p>
 
@@ -356,8 +368,8 @@ function Home() {
                 </div>
                 <div className="overflow-hidden min-w-0">
                   <span className="text-[11px] uppercase tracking-wider text-slate-400 font-bold block mb-0.5">Điểm đến / Khách sạn</span>
-                  <div className="text-sm font-bold text-slate-800 truncate" title="LuxeHotel Grand Resort, Đà Nẵng">
-                    LuxeHotel Grand Resort, Đà Nẵng
+                  <div className="text-sm font-bold text-slate-800 truncate" title="The Infinity Grand Resort, Đà Nẵng">
+                    The Infinity Grand Resort, Đà Nẵng
                   </div>
                 </div>
               </div>
@@ -451,41 +463,52 @@ function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {PROMO_CODES.map((promo) => (
-              <div
-                key={promo.code}
-                className="rounded-2xl border border-slate-200 bg-gradient-to-br from-white via-slate-50/50 to-amber-50/20 p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group hover:border-amber-400/50"
-              >
-                <div>
-                  <div className="flex justify-between items-start mb-3">
-                    <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[11px] font-bold">
-                      {promo.tag}
-                    </span>
-                    <span className="text-xl font-black text-amber-600">
-                      {promo.discount}
-                    </span>
+            {PROMO_CODES.map((promo) => {
+              const isLocked = !isLoggedIn || !promo.allowedTiers.includes(currentTier);
+              return (
+                <div
+                  key={promo.code}
+                  className={`rounded-2xl border border-slate-200 bg-gradient-to-br from-white via-slate-50/50 to-amber-50/20 p-5 shadow-sm transition-all flex flex-col justify-between group ${isLocked ? 'opacity-80 grayscale-[40%]' : 'hover:shadow-md hover:border-amber-400/50'}`}
+                >
+                  <div>
+                    <div className="flex justify-between items-start mb-3">
+                      <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${isLocked ? 'bg-slate-100 text-slate-500' : 'bg-amber-100 text-amber-800'}`}>
+                        {promo.tag}
+                      </span>
+                      <span className={`text-xl font-black ${isLocked ? 'text-slate-400' : 'text-amber-600'}`}>
+                        {promo.discount}
+                      </span>
+                    </div>
+                    <h3 className={`font-bold text-base mb-1.5 transition-colors ${isLocked ? 'text-slate-600' : 'text-slate-900 group-hover:text-amber-600'}`}>
+                      {promo.title}
+                    </h3>
+                    <p className="text-xs text-slate-500 leading-relaxed mb-4">
+                      {promo.desc}
+                    </p>
                   </div>
-                  <h3 className="font-bold text-slate-900 text-base mb-1.5 group-hover:text-amber-600 transition-colors">
-                    {promo.title}
-                  </h3>
-                  <p className="text-xs text-slate-500 leading-relaxed mb-4">
-                    {promo.desc}
-                  </p>
-                </div>
 
-                <div className="pt-3 border-t border-dashed border-slate-200 flex items-center justify-between">
-                  <span className="font-mono font-bold text-xs text-slate-700 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-300">
-                    {promo.code}
-                  </span>
-                  <button
-                    onClick={() => handleCopy(promo.code)}
-                    className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 cursor-pointer bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-lg transition-colors"
-                  >
-                    <CopyOutlined /> Sao chép
-                  </button>
+                  <div className="pt-3 border-t border-dashed border-slate-200 flex items-center justify-between">
+                    <span className={`font-mono font-bold text-xs bg-slate-100 px-2.5 py-1 rounded-md border border-slate-300 ${isLocked ? 'text-slate-400 blur-[3px] select-none' : 'text-slate-700'}`}>
+                      {isLocked ? 'LOCKEDCODE' : promo.code}
+                    </span>
+                    {isLocked ? (
+                      <Tooltip title={promo.lockMsg}>
+                        <div className="text-[11px] font-bold text-slate-400 flex items-center gap-1 bg-slate-50 px-3 py-1 rounded-lg border border-slate-200 cursor-not-allowed">
+                          <LockOutlined /> {isLoggedIn ? 'Chưa đủ hạng' : 'Cần đăng nhập'}
+                        </div>
+                      </Tooltip>
+                    ) : (
+                      <button
+                        onClick={() => handleCopy(promo.code)}
+                        className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 cursor-pointer bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-lg transition-colors"
+                      >
+                        <CopyOutlined /> Sao chép
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
@@ -674,7 +697,7 @@ function Home() {
               id="amenity-spa"
               onClick={() => {
                 setSelectedService({
-                  name: 'Luxe Spa & Trị liệu phục hồi',
+                  name: 'The Infinity Spa & Trị liệu phục hồi',
                   icon: '💆',
                   desc: 'Hệ thống xông hơi đá muối Himalaya, bể sục Jacuzzi nóng lạnh và các gói massage bấm huyệt thảo dược chuyên sâu giúp tái tạo hoàn toàn năng lượng thể chất và tinh thần.'
                 });
@@ -767,7 +790,7 @@ function Home() {
         centered
         title={
           <div className="flex items-center gap-2 text-amber-600 text-lg font-black">
-            <GiftOutlined /> TẤT CẢ MÃ ƯU ĐÃI & KHUYẾN MÃI LUXEHOTEL
+            <GiftOutlined /> TẤT CẢ MÃ ƯU ĐÃI & KHUYẾN MÃI THE INFINITY
           </div>
         }
       >
@@ -840,20 +863,20 @@ function Home() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
             <div className="md:col-span-1">
               <div className="text-2xl font-black text-white mb-3">
-                LUXE<span className="text-amber-400">HOTEL</span>
+                THE <span className="text-amber-400">INFINITY</span>
               </div>
               <p className="text-xs text-slate-400 leading-relaxed mb-4">
                 Hệ thống khách sạn & khu nghỉ dưỡng chuẩn 5 sao quốc tế, mang lại không gian thư giãn đỉnh cao cho từng hành trình.
               </p>
               <div className="text-xs text-slate-500">
-                © 2026 LuxeHotel Resort. All rights reserved.
+                © 2026 The Infinity Resort. All rights reserved.
               </div>
             </div>
 
             <div>
               <h4 className="text-white font-bold mb-4 text-xs uppercase tracking-wider">Về chúng tôi</h4>
               <ul className="space-y-2 text-xs">
-                <li><a href="#" className="hover:text-amber-400 transition-colors">Giới thiệu LuxeHotel</a></li>
+                <li><a href="#" className="hover:text-amber-400 transition-colors">Giới thiệu The Infinity</a></li>
                 <li><a href="#" className="hover:text-amber-400 transition-colors">Hệ thống phòng & Biệt thự</a></li>
                 <li><a href="#" className="hover:text-amber-400 transition-colors">Dịch vụ & Tiện ích</a></li>
                 <li><a href="#" className="hover:text-amber-400 transition-colors">Tin tức & Sự kiện</a></li>
@@ -874,7 +897,7 @@ function Home() {
               <h4 className="text-white font-bold mb-4 text-xs uppercase tracking-wider">Liên hệ trực tiếp</h4>
               <p className="text-xs text-slate-400 mb-2">📍 Võ Nguyên Giáp, Sơn Trà, Đà Nẵng, Việt Nam</p>
               <p className="text-xs text-slate-400 mb-2">📞 Hotline: 1900 8888 / 028 3822 9999</p>
-              <p className="text-xs text-slate-400 mb-4">✉️ reservation@luxehotel.vn</p>
+              <p className="text-xs text-slate-400 mb-4">✉️ reservation@theinfinity.vn</p>
             </div>
           </div>
 
